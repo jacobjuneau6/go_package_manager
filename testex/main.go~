@@ -1,0 +1,249 @@
+package main
+import ("fmt")
+import("os")
+import ( "os/exec")
+import ("bufio")
+import ("log")
+import ("strings")
+//import ("io/ioutil")
+//import ( "runtime")
+const shell ="/bin/bash"
+var val int
+var number = 0
+var valu = 0
+var path = "/packages/list.d/sour.list"
+var curl1 = "/usr/bin/curl -s -o /packages/index.text "
+var curlf string
+var index = "/packages/index.text"
+var packagen string
+var lol = 0
+var els string
+var nub int
+var els25 string
+var els35 string
+var output string
+//val := 0
+func varible() {
+//	var val int
+//	global val
+	val := 0
+	fmt.Println(val)
+	fmt.Println("Enter The package you want to install: ")
+	fmt.Scanln(&packagen)
+	fmt.Println(packagen)
+}
+func mkdir() {
+   // var output string
+    out, err := exec.Command("mkdir", "/packages").Output()
+    if err != nil {
+        fmt.Printf("%s", err)
+    }
+    output := string(out[:])
+    fmt.Println(output)
+}
+func file1() {
+	////////
+//	file, _ := os.Open("/packages/list.d/sour.list")
+//	fileScanner := bufio.NewScanner(file)
+//	lineCount := 0
+//	for fileScanner.Scan() {
+ //	   lineCount++
+//	}
+//	fmt.Println("number of lines:", lineCount)
+//	file.Close()
+	readFile, err := os.Open(path)
+	if err != nil {
+		log.Fatalf("failed to open file: %s", err)
+	}
+	fileScanner := bufio.NewScanner(readFile)
+	fileScanner.Split(bufio.ScanLines)
+	var fileTextLines []string
+	for fileScanner.Scan() {
+		fileTextLines = append(fileTextLines, fileScanner.Text())
+	}
+	readFile.Close()
+	for _, eachline := range fileTextLines {
+		//valu = 0
+		fmt.Println(eachline)
+		number++
+		//fmt.Println(out)
+		curlf = curl1+eachline
+		fmt.Println(curlf)
+		fmt.Println(number)
+		out, err := exec.Command(shell, "-c", curlf).Output()
+		if err != nil {
+			fmt.Printf("%s", err)
+		}
+		fmt.Println(out)
+		curlf = curl1+eachline
+		fmt.Println(curlf)
+		readFile2, err := os.Open(index)
+	if err != nil {
+		log.Fatalf("failed to open file: %s", err)
+	}
+	fileScanner2 := bufio.NewScanner(readFile2)
+	fileScanner2.Split(bufio.ScanLines)
+	var fileTextLines2 []string
+	for fileScanner2.Scan() {
+		fileTextLines2 = append(fileTextLines2, fileScanner2.Text())
+	}
+	readFile2.Close()
+	for _, eachline := range fileTextLines2 {
+		//valu = 0
+		fmt.Println(eachline)
+		els := strings.Split(eachline, " ")
+		els2, els3 := els[0], els[1]
+		fmt.Println(els2,"els3:",els3)
+		if packagen == els2 { //&& nub == number{
+			fmt.Println("this package will be installed.")
+			els25 = els2
+			els35 = els3
+			return
+		}
+		//els := strings.Split(eachline, ";")
+//		els := strings.Fields(eachline)
+		//fmt.Println("%q\n",strings.Split("c;b", ";"))
+//		fmt.Println(els)
+		//out, err := exec.Command("curl -s -o /packages/index.text", " ", eachline).Output()
+		//curlf = curl1+eachline
+		//fmt.Println(curlf)
+//		if lol == number{
+//			fmt.Println("Enter The package you want to install: ")
+//			fmt.Scanln(&packagen)
+//			fmt.Println(packagen)
+//		//	lol = 2
+//		} else {
+//			lol++
+//		}
+	//	lol = lol+1
+	}
+	}
+		//////////////////
+//	readFile2, err := os.Open(index)
+//	if err != nil {
+//		log.Fatalf("failed to open file: %s", err)
+//	}
+//	fileScanner2 := bufio.NewScanner(readFile2)
+//	fileScanner2.Split(bufio.ScanLines)
+//	var fileTextLines2 []string
+//	for fileScanner2.Scan() {
+//		fileTextLines2 = append(fileTextLines2, fileScanner2.Text())
+//	}
+//	readFile2.Close()
+//	for _, eachline := range fileTextLines2 {
+		//valu = 0
+	//fmt.Println(eachline)
+		//out, err := exec.Command("curl -s -o /packages/index.text", " ", eachline).Output()
+		//curlf = curl1+eachline
+		//fmt.Println(curlf)
+//		if lol < 1 {
+//			fmt.Println("Enter The package you want to install: ")
+//			fmt.Scanln(&packagen)
+//			fmt.Println(packagen)
+//			lol = 1
+//		}
+//	}
+}
+func install() {
+//	var err string
+//	var out string
+//	curlp := "curl", "-s", "-o", "/packages/", els25, ".gz",els35
+//	fmt.Println(curlp) 
+//	out, err := exec.Command("sudo", "curl", "-o", "/packages/", els25, ".gz",els35).Output()
+//	fmt.Printf("%s", err)
+//	o := err
+//	output := string(out[:])
+//	fmt.Println(output)
+	path := "/packages/"+els25+".gz"
+	fmt.Println(path)
+	out, err := exec.Command("sudo", "curl", "-o", path, els35).Output()
+	if err != nil {
+		fmt.Printf("%s", err)
+	}
+	fmt.Println("Command Successfully Executed")
+    	output := string(out[:])
+    	fmt.Println(output)
+}
+func install2() {
+	path := "/packages/"+els25+".gz"
+	fmt.Println(path)
+	out, err := exec.Command("sudo", "gzip", "-d", path).Output()
+	if err != nil {
+		fmt.Printf("%s", err)
+	}
+	fmt.Println("Command Successfully Executed")
+    	output := string(out[:])
+    	fmt.Println(output)
+}
+func install3() {
+		path := "/packages/"+els25
+	fmt.Println(path)
+	out, err := exec.Command("sudo", "chmod", "a+x", path).Output()
+	if err != nil {
+		fmt.Printf("%s", err)
+	}
+	fmt.Println("Command Successfully Executed")
+    	output := string(out[:])
+    	fmt.Println(output)
+}
+func install4() {
+	path := "/packages/"+els25
+	path9 := "/bin/"+els25
+	fmt.Println(path)
+	out, err := exec.Command("sudo", "mv", path, path9).Output()
+	if err != nil {
+		fmt.Printf("%s", err)
+	}
+	fmt.Println("Command Successfully Executed")
+    	output := string(out[:])
+    	fmt.Println(output)
+  //  	s := []byte(els25+"\n")
+//	ioutil.WriteFile("/packages/installed.list", s, 0644)
+	
+}
+func flil() {
+	write := els25+"\n"
+	file, err := os.OpenFile("/packages/installed.list", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return
+	}
+	defer file.Close()
+	 _, err2 := file.WriteString(write)
+	 if err2 != nil {
+	 	fmt.Println("Could not write text to example.txt")
+	 } else {
+	 	fmt.Println("Operation successful! Text has been appended to example.txt")
+	 }
+}
+	/*
+	gz := "gzip -d /packages/"+els25+".gz"+"\n"
+//	out, err = exec.Command(gz).Output()
+	fmt.Println(gz)
+	fmt.Println("%s", err)
+	output = string(out[:])
+	//fmt.Println(els25)
+	chmod := "chmod a+x /packages/"+els25+"\n"
+//	out, err = exec.Command(gz).Output()
+	fmt.Println(chmod)
+	fmt.Println("%s", err)
+	output = string(out[:])
+	mv := "sudo mv /packages/"+els25+" /bin/"+els25+"\n"
+//	out, err = exec.Command(gz).Output()
+	fmt.Println(mv)
+	fmt.Println("%s", err)
+	fmt.Println(o)
+	output = string(out[:])
+	s := []byte(els25)
+	ioutil.WriteFile("/packages/installed.list", s, 0644)
+
+}*/
+func main() {
+varible()
+mkdir()
+file1()
+install()
+install2()
+install3()
+install4()
+flil()
+}
